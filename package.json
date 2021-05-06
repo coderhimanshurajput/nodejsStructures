@@ -1,0 +1,45 @@
+{
+  "name": "node-rest-api",
+  "version": "1.0.0",
+  "description": "Rest API",
+  "scripts": {
+    "start": "node server.js",
+    "eslint": "eslint src/**/*.js --fix",
+    "fix": "prettier-eslint --write src/**/*.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Himanshu Rajput",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chalk": "^4.1.1",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.5",
+    "cross": "^1.0.0",
+    "dotenv": "^8.2.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "express": "^4.17.1",
+    "express-mongo-sanitize": "^2.0.2",
+    "express-rate-limit": "^5.2.6",
+    "express-session": "^1.17.1",
+    "figlet": "^1.5.0",
+    "helmet": "^4.5.0",
+    "hpp": "^0.2.3",
+    "lusca": "^1.7.0",
+    "morgan": "^1.10.0",
+    "nocache": "^2.1.0",
+    "ora": "^5.4.0",
+    "prettier": "^2.2.1",
+    "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.24.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "prettier-eslint-cli": "^5.0.1"
+  }
+}
