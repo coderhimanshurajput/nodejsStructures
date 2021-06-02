@@ -1,9 +1,11 @@
 const helmet = require('helmet');
 const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
 const xss = require('xss-clean');
-// csrf = require('csurf'),
+// const csrf = require('csrf');
 const hpp = require('hpp');
-const cors = require('cross');
+const cors = require('cors');
 const lusca = require('lusca');
 const nocache = require('nocache');
 const RateLimit = require('express-rate-limit');
@@ -12,13 +14,28 @@ const bodyParser = require('body-parser');
 const cookiesParser = require('cookie-parser');
 const compression = require('compression');
 const session = require('express-session');
+const accessLogStream = fs.createWriteStream(path.join(__dirname, './../../../../../access.log'), { flags: 'a' });
+
+// const csrfMiddleware = csrf({ cookie: true });
 
 module.exports = (app) => {
-	// app.use(cors());
+	// app.use(csrfMiddleware);
+	app.use(cors());
 	app.use(xss());
 	app.use(nocache());
 	app.use(compression());
 	app.use(cookiesParser());
+	app.use(
+		mongoSanitize({
+			replaceWith: '_',
+		})
+	);
+
+	// app.use('*', (req, res, next) => {
+	// 	res.cookie('XSRF-TOKEN', req.csrfToken);
+	// });
+	// setup the logger
+	app.use(morgan('combined', { stream: accessLogStream }));
 	app.use((req, res, next) => {
 		bodyParser.json({
 			limit: '5mb',
@@ -71,7 +88,7 @@ module.exports = (app) => {
 	);
 	const limiter = new RateLimit({
 		windowMs: 10 * 60 * 1000, // 15 minutes
-		max: 50, // limit each IP to 100 requests per windowMs
+		max: 40, // limit each IP to 100 requests per windowMs
 		delayMs: 0, // disable delaying — full speed until the max limit is reached
 	});
 	app.use(limiter);
@@ -81,7 +98,7 @@ module.exports = (app) => {
 		res.header('X-XSS-Protection', '1; mode=block');
 		res.header('X-Frame-Options', 'deny');
 		res.header('X-Content-Type-Options', 'nosniff');
-		res.header('Access-Control-Allow-Methods', 'PUT, POST, HEAD , OPTIONS ');
+		res.header('Access-Control-Allow-Methods', 'PUT, POST, GET,HEAD , OPTIONS ');
 		res.header('Access-Control-Allow-Origin', '*');
 		res.header(
 			'Access-Control-Allow-Headers',

@@ -9,21 +9,24 @@ const ora = require('ora');
 async function expressServer() {
 	const server = require('http').createServer(app);
 	await require(path.resolve('./src/library/shares/server'))(app, ENV);
-	server.listen(ENV.PORT, () => {
-		// eslint-disable-next-line no-console
-		const ServerMess = ora(
-			chalk`{bgYellow Node Js server running on {green.bold ${
-				(process.env.NODE_ENV === 'secure' ? 'https://' : 'http://') +
-				ENV.APP_HOST +
-				':' +
-				ENV.PORT
-			}} port at {green.bold ${ENV.MODE_TYPE}}..}`
-		).start();
-		setTimeout(() => {
-			ServerMess.stop();
-			ServerMess.succeed();
-		}, 2000);
-	});
+	setTimeout(async () => {
+		server.listen(ENV.PORT, () => {
+			// eslint-disable-next-line no-console
+			const ServerMess = ora(
+				chalk`{bgYellow Node Js server running on {green.bold ${
+					(process.env.NODE_ENV === 'secure' ? 'https://' : 'http://') +
+					ENV.APP_HOST +
+					':' +
+					ENV.PORT
+				}} port at {green.bold ${ENV.MODE_TYPE}}..}`
+			).start();
+			setTimeout(() => {
+				ServerMess.stop();
+				ServerMess.succeed();
+			}, 800);
+		});
+	}, 1000);
+
 }
 
 function serverStart() {
@@ -44,14 +47,14 @@ async function Waiting() {
 	setTimeout(() => {
 		_waiting.stop();
 		_waiting.succeed();
-	}, 2000);
+	}, 200);
 }
 
 async function mainServer() {
 	// server run without socket
 	serverStart();
 	await setTimeout(Waiting, 300);
-	await setTimeout(expressServer, 6000);
+	await setTimeout(expressServer, 1000);
 }
 if (require.main === module) {
 	// @ run server without cluster module
